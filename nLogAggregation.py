@@ -17,14 +17,13 @@ key_length = 40
 def wait_stdin():
     print("wait_stdin")
     for line in sys.stdin:
-
         key = keyword.search(line)
         if key:
-            if not logs.get(key.group()):
-                wk_key = key.group()[0:key_length]
+            wk_key = key.group()[0:key_length]
+            if not logs.get(wk_key):
                 logs[wk_key] = {"log": line, "cnt": 1}
             else:
-                logs[key.group()]["cnt"] = logs[key.group()]["cnt"] + 1
+                logs[wk_key]["cnt"] = logs[wk_key]["cnt"] + 1
         else:
             print("unkown logs")
 
