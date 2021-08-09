@@ -3,15 +3,23 @@ import sys
 import re
 import time
 import threading
-import schedule
-
 import datetime
+import configparser
+
+import schedule
 
 logs = dict({})
 
-keyword = re.compile(r"(GET|POST).+")
+config = configparser.SafeConfigParser()
+config.read("nLogAggregation.conf")
 
-key_length = 40
+regex_string = str(config.get("setting", "regex_string"))
+
+key_length = int(config.get("setting", "key_length"))
+
+watch_seconds = int(config.get("setting", "watch_seconds"))
+
+keyword = re.compile(regex_string)
 
 
 def wait_stdin():
@@ -30,7 +38,7 @@ def wait_stdin():
 
 def summry_logs():
     print("summry_log")
-    schedule.every(10).seconds.do(
+    schedule.every(watch_seconds).seconds.do(
         lambda:
         # 定期実行処理
         output_logs()
